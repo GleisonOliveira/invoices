@@ -1,4 +1,4 @@
-# Fatura
+# Invoices
 
 **TODO: Add description**
 
