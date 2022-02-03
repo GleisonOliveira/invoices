@@ -26,20 +26,11 @@ defmodule FaturaTest do
   end
 
   test "should return a splited list" do
-    splited = Invoices.invoices_to_pay(Invoices.create_invoices(["water", "light"], [5, 10]), 1)
+    {splited, others} = Invoices.invoices_to_pay(Invoices.create_invoices(["water", "light"], [5, 10]), 1)
 
-    assert splited ==
-             {["Invoice: water expire on 5"],
-              [
-                "Invoice: water expire on 10",
-                "Invoice: light expire on 5",
-                "Invoice: light expire on 10"
-              ]}
+    assert splited == ["Invoice: water expire on 5"]
 
-    assert elem(splited, 0)
-           |> Enum.count() == 1
-
-    assert elem(splited, 1)
-           |> Enum.count() == 3
+    assert Enum.count(splited) == 1
+    assert Enum.count(others) == 3
   end
 end
