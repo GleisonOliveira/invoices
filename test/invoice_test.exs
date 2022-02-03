@@ -3,8 +3,14 @@ defmodule FaturaTest do
   doctest Invoices
 
   test "should create an invoices list" do
-    invoices = Invoices.create_invoices(["water", "light", "phone"], "")
-    assert invoices == ["water", "light", "phone"]
+    invoices = Invoices.create_invoices(["water", "light"], [5, 10])
+
+    assert invoices == [
+             "Invoice: water expire on 5",
+             "Invoice: water expire on 10",
+             "Invoice: light expire on 5",
+             "Invoice: light expire on 10"
+           ]
   end
 
   test "should return a ordered list of invoices" do
@@ -13,7 +19,27 @@ defmodule FaturaTest do
   end
 
   test "should return if invoice exists" do
-    invoice = Invoices.invoice_exist?(Invoices.create_invoices(["water", "light", "phone"], ""), "phone")
+    invoice =
+      Invoices.invoice_exist?(Invoices.create_invoices(["water", "light"], [5, 10]), "water")
+
     assert invoice == true
+  end
+
+  test "should return a splited list" do
+    splited = Invoices.invoices_to_pay(Invoices.create_invoices(["water", "light"], [5, 10]), 1)
+
+    assert splited ==
+             {["Invoice: water expire on 5"],
+              [
+                "Invoice: water expire on 10",
+                "Invoice: light expire on 5",
+                "Invoice: light expire on 10"
+              ]}
+
+    assert elem(splited, 0)
+           |> Enum.count() == 1
+
+    assert elem(splited, 1)
+           |> Enum.count() == 3
   end
 end
