@@ -33,8 +33,7 @@ defmodule Invoices do
   """
   def invoice_exist?(invoices, invoice) do
     Enum.filter(invoices, fn element ->
-      String.split(element)
-      |> Enum.member?(invoice)
+      String.contains?(element, invoice)
     end)
     |> Enum.count() >= 1
   end
